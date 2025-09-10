@@ -107,17 +107,50 @@ def get_param(shape):
     return param
 
 
-def com_mult(a, b):
-	r1, i1 = a[..., 0], a[..., 1]
-	r2, i2 = b[..., 0], b[..., 1]
-	return torch.stack([r1 * r2 - i1 * i2, r1 * i2 + i1 * r2], dim = -1)
+def com_mult(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
+    # if a.dim() >= 2 and a.size(-1) == 2 and b.dim() >= 2 and b.size(-1) == 2:
+    # r1, i1 = a[..., 0], a[..., 1]
+    # r2, i2 = b[..., 0], b[..., 1]
+    # return torch.stack([r1 * r2 - i1 * i2, r1 * i2 + i1 * r2], dim=-1)
+    if a.is_complex() and b.is_complex():
+        return a * b
+
+    # Legacy: real tensors shaped [..., 2]
+    if a.dim() >= 1 and a.size(-1) == 2 and b.dim() >= 1 and b.size(-1) == 2:
+        a_c = torch.view_as_complex(a)
+        b_c = torch.view_as_complex(b)
+        return a_c * b_c
+
+    raise ValueError(
+        f"Unsupported tensor format for com_mult(): "
+        f"dtype/shapes: a dtype {a.dtype}, shape {a.shape}; b dtype {b.dtype}, shape {b.shape}"
+    )
+
 
 def conj(a):
-	a[..., 1] = -a[..., 1]
-	return a
+    # if a.dim() >= 2 and a.size(-1) == 2:
+    # a[..., 1] = -a[..., 1]
+    # return a
+    if a.is_complex():
+        return torch.conj(a)
+    # If it's real tensor with last dim size 2:
+    if a.dtype in (torch.float32, torch.float64, torch.float16) and a.size(-1) == 2:
+        a = torch.view_as_complex(a)
+        return torch.conj(a)
+    raise ValueError(
+        f"Unsupported tensor type or shape for conj(): dtype={a.dtype}, shape={a.shape}"
+    )
+
 
 def cconv(a, b):
-	return torch.irfft(com_mult(torch.rfft(a, 1), torch.rfft(b, 1)), 1, signal_sizes=(a.shape[-1],))
+    return torch.fft.irfft(
+        com_mult(torch.fft.rfft(a, 1), torch.fft.rfft(b, 1)), 1, n=a.shape[-1], dim=1
+    )
+
 
 def ccorr(a, b):
-	return torch.irfft(com_mult(conj(torch.rfft(a, 1)), torch.rfft(b, 1)), 1, signal_sizes=(a.shape[-1],))
+    return torch.fft.irfft(
+        com_mult(conj(torch.fft.rfft(a, dim=1)), torch.fft.rfft(b, dim=1)),
+        n=a.shape[-1],
+        dim=1,
+    )
