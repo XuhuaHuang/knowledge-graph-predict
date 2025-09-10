@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run main.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/",
+            "args": [
+                "-data",
+                "test_data",
+                "-gpu",
+                "0",
+                "-name",
+                "test_model",
+                "-epoch",
+                "500",
+            ],
+            "justMyCode": false,
+            "stopOnEntry": false,
+            "env": {
+                "PYTHONUNBUFFERED": "1",
+                "CUDA_VISIBLE_DEVICES": "0"
+            }
+        }
+    ]
+}

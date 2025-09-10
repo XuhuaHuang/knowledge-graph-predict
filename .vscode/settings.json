@@ -1,0 +1,17 @@
+{
+    "cSpell.words": [
+        "allclose",
+        "cuda",
+        "numpy",
+        "pycache",
+        "randn",
+        "scikit",
+        "torchaudio",
+        "torchvision"
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

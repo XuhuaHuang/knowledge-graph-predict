@@ -13,6 +13,37 @@ scikit_learn(version>=0.21.1)
 
 We highly recommend you use Conda for package management.
 
+If you have an existing conda virtual environment that you would like to use, (eg. `base`), you can install the required dependency with the following:
+
+```bash
+conda install pytorch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 -c pytorch -c nvidia
+```
+
+If you are creating a new virtual environment, you can do so by running the following:
+
+```bash
+conda env create -f environment.yml
+conda activate knowledge-graph-predict
+```
+
+Verify the setup with the following:
+
+```bash
+>>> import torch
+>>> torch.__version__
+'2.5.1.post303'
+>>> torch.cuda.is_available()
+True
+>>> torch.version.cuda
+'12.0'
+```
+
+If you are using the provided `launch.json` inside `Visual Studio Code`, use the first available GPU node `0` like the following:
+
+```bash
+python main.py -data test_data -gpu 0 -name test_model -epoch 500
+```
+
 
 ## Model Training:
 1)Create a folder "test_data" under folder "data" and move training data, valid data, and test data to the folder. 
