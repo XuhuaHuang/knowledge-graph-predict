@@ -1,0 +1,4 @@
+__pycache__/
+data/test_data/
+log/test_model
+model_saved/test_model

@@ -6,7 +6,6 @@
             "format": "%(asctime)s - %(name)s - [%(levelname)s] - %(message)s"
         }
     },
-
     "handlers": {
         "file_handler": {
             "class": "logging.FileHandler",
@@ -16,9 +15,10 @@
             "encoding": "utf8"
         }
     },
-
     "root": {
         "level": "DEBUG",
-        "handlers": ["file_handler"]
+        "handlers": [
+            "file_handler"
+        ]
     }
 }
