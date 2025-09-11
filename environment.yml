@@ -13,5 +13,5 @@ dependencies:
   - pandas
   - scikit-learn
   - torch-scatter
-  - ordered_set=4.1.0
+  - ordered-set
   - pip
